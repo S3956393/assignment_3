@@ -1,5 +1,5 @@
-from flask import Flask, render_template
-import tmdb
+from flask import Flask, render_template, get_template_attribute
+import tmdb, open_library
 
 app = Flask(__name__)
 
@@ -16,15 +16,31 @@ def home():
 
 @app.route("/map")
 def map():
-    # TODO: Somehow we need to get JavaScript? to pass the ISO code from the map
-    # so that we can get the movie via the TMDB API for that country
+    pass
+    # [ ] TODO: Get the ISO code from the front end, so we can get the
+    # top movie from the TMDB API and the ISBN from the database
 
-    # NOTE: Uncomment the line of 22 and 25 when the above is done, and delete line 26
-    # title, plot, poster_url = tmdb.get_highest_grossing_movie(region)
-    # This renders the HTML page for the map, and passes the title, plot and poster url back to the HTML page
+    # NOTE: No clue if this will work...
+    # This method looks in the "the_map_page.html" (an example), and looks for
+    # the isbn and region variables and passes their values to flask
+    # isbn = get_template_attribute("map_test.html", isbn)
+    # region = get_template_attribute("map_test.html", region)
 
-    # return render_template("the_map_page.html", title=title, plot=plot, poster_url=poster_url)
-    return "This is the map page"
+    # movie_title, movie_plot, poster_url = tmdb.get_highest_grossing_movie(region)
+    # book_title, author, excerpt, book_cover = open_library.get_book_data_by_isbn(isbn)
+
+    # content = {
+    #     'movie_title': movie_title,
+    #     'movie_plot': movie_plot,
+    #     'poster_url': poster_url,
+    #     'book_title': book_title,
+    #     'author': author,
+    #     'excerpt': excerpt,
+    #     'book_cover': book_cover
+    # }
+
+    # This renders the HTML page for variables in the content dictionary and passes it back to the HTML page
+    # return render_template("map_test.html", **content)
 
 # Template for adding subpages
 # Change the '/some-page' to something relevant. 

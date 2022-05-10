@@ -1,13 +1,13 @@
 CREATE TABLE [IF NOT EXISTS] Book (
-    TitleID INTEGER PRIMARY KEY,
+    ISBN INTEGER PRIMARY KEY,
     Title TEXT NOT NULL,
     Synopsis TEXT NOT NULL,
     CountryCode INTEGER NOT NULL,
-    FOREIGN KEY (CountryCode) references Country (Code) 
+    FOREIGN KEY (CountryCode) references Country (CountryCode) 
 );
 
 CREATE TABLE [IF NOT EXISTS] Author (
-    TitleID TEXT NOT NULL,
+    ISBN TEXT NOT NULL,
     AuthorID INTEGER NOT NULL,
     FOREIGN KEY (AuthorID) references AuthorDetails (AuthorID)
 );

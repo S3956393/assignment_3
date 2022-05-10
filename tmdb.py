@@ -1,5 +1,4 @@
-import requests
-import os
+import requests, os
 
 API_SECRET_KEY = os.environ.get("TMDB_API_KEY")
 BASE_URL = "https://api.themoviedb.org/3"
