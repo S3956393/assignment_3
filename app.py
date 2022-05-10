@@ -27,7 +27,7 @@ def map():
     # region = get_template_attribute("map_test.html", region)
 
     # movie_title, movie_plot, poster_url = tmdb.get_highest_grossing_movie(region)
-    # book_title, author, excerpt, book_cover = open_library.get_book_data_by_isbn(isbn)
+    # book_title, author, synopsis, book_cover = open_library.get_book_data_by_isbn(isbn)
 
     # content = {
     #     'movie_title': movie_title,
@@ -35,7 +35,7 @@ def map():
     #     'poster_url': poster_url,
     #     'book_title': book_title,
     #     'author': author,
-    #     'excerpt': excerpt,
+    #     'synopsis': synopsis,
     #     'book_cover': book_cover
     # }
 
