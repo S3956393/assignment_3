@@ -1,4 +1,5 @@
 from flask import Flask, render_template, get_template_attribute
+from markupsafe import Markup
 import tmdb, open_library
 
 app = Flask(__name__)
@@ -16,7 +17,8 @@ def home():
 
 @app.route("/map")
 def map():
-    pass
+    svg_map = open("static\images\Worldmap-blank.svg").read()
+    return render_template("map.html", svg_map=Markup(svg_map))
     # [ ] TODO: Get the ISO code from the front end, so we can get the
     # top movie from the TMDB API and the ISBN from the database
 
@@ -28,6 +30,8 @@ def map():
 
     # movie_title, movie_plot, poster_url = tmdb.get_highest_grossing_movie(region)
     # book_title, author, synopsis, book_cover = open_library.get_book_data_by_isbn(isbn)
+
+    # TODO: Use the region variable to get the full name of the country
 
     # content = {
     #     'movie_title': movie_title,

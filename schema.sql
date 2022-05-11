@@ -1,33 +1,20 @@
 CREATE TABLE [IF NOT EXISTS] Book (
-    ISBN INTEGER PRIMARY KEY,
-    Title TEXT NOT NULL,
-    Synopsis TEXT NOT NULL,
-    CountryCode INTEGER NOT NULL,
-    FOREIGN KEY (CountryCode) references Country (CountryCode) 
-);
-
-CREATE TABLE [IF NOT EXISTS] Author (
-    ISBN TEXT NOT NULL,
-    AuthorID INTEGER NOT NULL,
-    FOREIGN KEY (AuthorID) references AuthorDetails (AuthorID)
-);
-
-CREATE TABLE [IF NOT EXISTS] AuthorDetails (
-    AuthorID INTEGER NOT NULL PRIMARY KEY
-    Name TEXT NOT NULL
+    ISBN VARCHAR(17) PRIMARY KEY,
+    CountryCode CHAR(2) NOT NULL,
+    FOREIGN KEY (CountryCode) REFERENCES Country(CountryCode) 
 );
 
 CREATE TABLE [IF NOT EXISTS] Song (
   SongID INTEGER NOT NULL PRIMARY KEY,
-  Name INTEGER NOT NULL,
-  CountryCode INTEGER NOT NULL,
-  FOREIGN KEY (CountryCode) references Country (CountryCode)  
+  Title TEXT NOT NULL,
+  CountryCode CHAR(2) NOT NULL,
+  FOREIGN KEY (CountryCode) REFERENCES Country(CountryCode)  
 );
 
 CREATE TABLE [IF NOT EXISTS] Artist (
     SongID INTEGER NOT NULL PRIMARY KEY,
     ArtistID INTEGER NOT NULL,
-    FOREIGN KEY (ArtistID) references ArtistDetails (ArtistID)
+    FOREIGN KEY (ArtistID) REFERENCES ArtistDetails(ArtistID)
 );
 
 CREATE TABLE [IF NOT EXISTS] ArtistDetails (
@@ -36,6 +23,6 @@ CREATE TABLE [IF NOT EXISTS] ArtistDetails (
 );
 
 CREATE TABLE [IF NOT EXISTS] Country (
-    Code TEXT NOT NULL PRIMARY KEY,
+    CountryCode CHAR(2) NOT NULL PRIMARY KEY,
     Name TEXT NOT NULL
 );
