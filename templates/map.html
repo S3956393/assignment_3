@@ -2,7 +2,52 @@
 <head>    
     <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
     <link rel="icon" type="image/png" href="static/images/team_logo.png"> <!-- This is for the logo in the tab-->
+
+    <!-- <style>
+        body, html {
+            width: 93%;
+            height: 93%;
+            margin: 0;
+        }
+    </style> -->
 </head>
 <body>
     {{ svg_map }}
+
+    <div id="content">
+        <h2>{{ movie_title }}</h2>
+        <p>{{ movie_plot }}</p>
+        <img src= {{ poster_url }}>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script type="text/javascript">
+
+        $(document).ready(function() {
+            countries =  $(".land, .independent, .limited, .external, .autonomous, .subdivision"); 
+            countries.click(function() {
+                $.ajax({
+                    url: "/get_iso_code",
+                    data: {"isoCode": event.target.classList[1].toUpperCase()},
+                    contentType: "application/json;charset=utf-8",
+                    type: "POST",
+                    dataType: "json",
+                    success: function(data) {
+                        $("#content").replaceWith(data)
+                    }
+                });    
+
+                // contentDiv = $("#content")[0]
+                // if (contentDiv.style.display == "None" ) {
+                //     contentDiv.style.display = "block"
+                //     console.log(contentDiv.style.display);
+                // }
+                // else {
+                //     contentDiv.style.display = "None"
+                //     console.log(contentDiv.style.display);
+                // }
+            });
+                        
+        });
+    </script>
 </body>
