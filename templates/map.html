@@ -4,57 +4,5 @@
     <link rel="icon" type="image/png" href="static/images/team_logo.png"> <!-- This is for the logo in the tab-->
 </head>
 <body>
-    <object id="svg-map" data="static\images\Worldmap-blank.svg" type="image/svg+xml"></object>
-    <script type="text/javascript">
-        // This will wait for the SVG to load onto the page
-        window.addEventListener("load", function() {
-            // This looks for through this HTML file for the element with
-            // the #svg-map ID, which is the <object> tag 
-            svgObj = document.getElementById("svg-map");
-            // This allows us to access the actual svg in the <object> tag
-            svg = svgObj.contentDocument
-            // This will allow us to access the <path> tags in the SVG files
-            // which is the actual countries
-            paths = svg.getElementsByTagName("path") // Returns a dictionary (same as python dictionary)
-            // Loop through the collection
-            for (let i = 0; i < paths.length; i++) {
-                // This will wait for you to hover the countries (<path> tag)
-                paths[i].addEventListener("mouseover", function() {
-                    // This will change the colour of the country you hover over
-                    paths[i].setAttribute("style", "fill:#F19F19")
-
-                    paths[i].addEventListener("click", function() {
-                        // Something to grab the ID of the element.
-                        groups = svg.getElementsByTagName("g")
-                        // temp = groups[0].textContent
-                        // console.log(temp);
-                        // TODO: Loop through the groups dictionary, 
-                        // access the nested via the .innerHTML property
-                        // then, use .getElementsByTagName with path tag
-
-                        // total = groups.length + pathsInGroups.length
-                        for (i = 0; i < groups.length; i++) { // Potential index error ??
-                            // nestedHTML = groups[i].innerHTML
-                            // pathsInGroups = nestedHTML.getElementsByTagName("path")
-                            // console.log("Paths inside <g> tags:");
-                            // console.log(pathsInGroups)
-                            console.log(groups[i]);
-                        }
-                        // console.log(paths[i]) // 
-                    });
-                });
-
-                // This will wait for you to move your mouse away from the country
-                paths[i].addEventListener("mouseout", function() {
-                    // This will remove the colour when you hover away from a country
-                    paths[i].removeAttribute("style")
-                });
-                    
-            }
-        });
-
-            // console.log(paths) // for testing.
-    // Nested <g> tag has ID which contain the ISO codes
-        // as well as the path tag, but some have pathXXXX
-    </script> 
+    {{ svg_map }}
 </body>

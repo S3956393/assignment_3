@@ -1,4 +1,4 @@
-from flask import Flask, render_template, get_template_attribute
+from flask import Flask, render_template, get_template_attribute, url_for, request, jsonify
 from markupsafe import Markup
 import tmdb, open_library
 
@@ -9,42 +9,11 @@ app = Flask(__name__)
 # You can either type in localhost:5000 or http://127.0.0.1:5000 (copied from the terminal)
 # To end the server just press ctrl+c in the terminal
 
-# This is the root/home page.
+# This is the root/home page
 @app.route("/")
 def home():
-    # Replace the text in the string with the HTML file for the home page
-    return render_template("enter_the_home_page.html")
-
-@app.route("/map")
-def map():
-    svg_map = open("static\images\Worldmap-blank.svg").read()
+    svg_map = open("static\images\World map with configurable borders.svg").read()
     return render_template("map.html", svg_map=Markup(svg_map))
-    # [ ] TODO: Get the ISO code from the front end, so we can get the
-    # top movie from the TMDB API and the ISBN from the database
-
-    # NOTE: No clue if this will work...
-    # This method looks in the "the_map_page.html" (an example), and looks for
-    # the isbn and region variables and passes their values to flask
-    # isbn = get_template_attribute("map_test.html", isbn)
-    # region = get_template_attribute("map_test.html", region)
-
-    # movie_title, movie_plot, poster_url = tmdb.get_highest_grossing_movie(region)
-    # book_title, author, synopsis, book_cover = open_library.get_book_data_by_isbn(isbn)
-
-    # TODO: Use the region variable to get the full name of the country
-
-    # content = {
-    #     'movie_title': movie_title,
-    #     'movie_plot': movie_plot,
-    #     'poster_url': poster_url,
-    #     'book_title': book_title,
-    #     'author': author,
-    #     'synopsis': synopsis,
-    #     'book_cover': book_cover
-    # }
-
-    # This renders the HTML page for variables in the content dictionary and passes it back to the HTML page
-    # return render_template("map_test.html", **content)
 
 # Template for adding subpages
 # Change the '/some-page' to something relevant. 
