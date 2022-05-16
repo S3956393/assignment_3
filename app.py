@@ -1,14 +1,41 @@
-from pickle import NONE
-from flask import Flask, render_template, get_template_attribute, url_for, request, jsonify
+from flask import Flask, render_template, url_for, request, jsonify
+from flask_sqlalchemy import SQLAlchemy
 from markupsafe import Markup
-import tmdb, open_library
+import tmdb, open_library, music_brainz
 
 app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:password@localhost:5432/IIT_assigment_3'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+db = SQLAlchemy(app)
 
-# NOTE: Only run this file directly.
-# Copy the server when you run this file into your browswer
-# You can either type in localhost:5000 or http://127.0.0.1:5000 (copied from the terminal)
-# To end the server just press ctrl+c in the terminal
+class Author(db.Model):
+    __tablename__ = 'author'
+    author_id = db.Column(db.Integer, primary_key=True, nullable=False)
+    author_name = db.Column(db.String, nullable=False)
+    ol_id = db.Column(db.String, db.ForeignKey('book.ol_id'), nullable=False)
+
+class Book(db.Model):
+    __tablename__ = 'book'
+    ol_id = db.Column(db.String, primary_key=True, nullable=False)
+    book_title = db.Column(db.String, nullable=False)
+    iso_code = db.Column(db.String(2), db.ForeignKey('country.iso_code'), nullable=False)
+
+class Song(db.Model):
+    __tablename__ = 'song'
+    mbid = db.Column(db.String(36), primary_key=True, nullable=False)
+    title = db.Column(db.String, nullable=False)
+    iso_code = db.Column(db.String(2), db.ForeignKey('country.iso_code'), nullable=False)
+
+class Singer(db.Model):
+    __tablename__ = 'singer'
+    singer_id = db.Column(db.Integer, primary_key=True, nullable=False)
+    singer_name = db.Column(db.String, nullable=True)
+    mbid = db.Column(db.String(36), db.ForeignKey('song.mbid'), nullable=False)
+
+class Country(db.Model):
+    __tablename__ = 'country'
+    iso_code = db.Column(db.String(2), primary_key=True, nullable=False)
+    country_name = db.Column(db.String, nullable=False)
 
 @app.route("/")
 def home():
@@ -18,25 +45,53 @@ def home():
 @app.route("/get_iso_code", methods = ['POST'])
 def get_iso_code():
     if request.method == 'POST':
-        res = request.get_data()
-        iso_code = res.decode('utf-8')[-2:]
+        iso_code = request.get_json()['isoCode']
 
-        movie_title, movie_plot, poster_url = tmdb.get_highest_grossing_movie(iso_code)
-        content = {
-            'movie_title': movie_title,
-            'movie_plot': movie_plot,
-            'poster_url': poster_url
-        }
-    return jsonify('', render_template('get_iso_code.html', **content))
+        if len(iso_code) == 2:
+            movie_title, movie_plot, movie_poster_url = tmdb.get_highest_grossing_movie(iso_code)
+            country_name, book_title, author_name, olid = get_book_data(iso_code)
+            synopsis, book_cover_url = open_library.get_book_data_by_olid(olid)
+            song_title, singer_name, mbid = get_song_data(iso_code)
+            album_cover = music_brainz.get_cover(mbid)
 
-# Template for adding subpages
-# Change the '/some-page' to something relevant. 
-# Since we don't have a navigation bar yet, just type localhost:5000/some_page in the search bar AFTER you run this file. 
-@app.route("/some_page")
-# Similarly, change the function name to something relevant for understandability
-def some_page():
-    # Change the text in the string to the HTML file for the page, which needs to be in the templates folder.
-    return render_template("some_page.html")
+            contents = {
+                'country': country_name,
+                'movie_title': movie_title,
+                'movie_plot': movie_plot,
+                'movie_poster': movie_poster_url,
+                'book_title': book_title,
+                'author': author_name,
+                'book_synopsis': synopsis,
+                'book_cover': book_cover_url,
+                'song_title': song_title,
+                'singer': singer_name,
+                'album_cover': album_cover
+            }
+
+            return jsonify('', render_template('get_iso_code.html', **contents))
+
+def get_book_data(iso):
+    country = Country.query.filter_by(iso_code=iso).first()
+    country_name = country.country_name
+
+    book = Book.query.filter_by(iso_code=iso).first()
+    book_title = book.book_title
+    olid = book.ol_id
+
+    author = Author.query.filter_by(ol_id=olid).first()
+    author_name = author.author_name
+
+    return country_name, book_title, author_name, olid
+
+def get_song_data(iso):
+    song = Song.query.filter_by(iso_code=iso).first()
+    song_title = song.title
+    mbid = song.mbid
+
+    singer = Singer.query.filter_by(mbid=mbid).first()
+    singer_name = singer.singer_name
+
+    return song_title, singer_name, mbid
 
 if __name__ == "__main__":
     app.run(debug=True)

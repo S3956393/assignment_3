@@ -1,35 +1,26 @@
-import requests
+import requests, json
 
-BASE_URL = "http://openlibrary.org/api"
-JSCMD = "data"
+BASE_URL = "http://openlibrary.org"
 
-def get_synopsis(work_id):
+def get_book_data_by_olid(olid):
+    synopsis = ''
+    image_url = ''
     page = "/works"
-    URL = BASE_URL[:-4] + page + "/" + str(work_id) + ".json"
-    resp = requests.get(URL).json()
-    resp_as_list = list(resp['works'])[0]
+    resp = requests.get(BASE_URL + page + "/" + olid + ".json").json()
+    # Check if there is a synopsis 
+    if 'description' in resp:
+        # Check if the synopsis is in the description or value key.
+        if 'value' in resp['description']:
+            synopsis = resp['description']['value']
+        else: 
+            synopsis = resp['description']
+    # Check if there is a cover
+    if 'covers' in resp:
+        # resp['covers'] is a list, & since we don't know how many covers there are, use the first as default
+        image_value = resp['covers'][0] 
+        image_size = 'M' # Sizes: S, M, L
+        image_url = f"https://covers.openlibrary.org/b/id/{image_value}-{image_size}.jpg"
+        
+    # cover_url = f"https://covers.openlibrary.org/b/olid/{olid}-M.jpg"
 
-    works_path = resp_as_list['key']
-    synopsis_url =  BASE_URL[:-4] + works_path + ".json"
-    synopsis_resp = requests.get(synopsis_url).json()
-    synopsis = synopsis_resp['description']
-    synopsis_without_link = synopsis.split("([source][1])", 1)[0]
-
-    return synopsis_without_link
-
-def get_book_data_by_isbn(isbn):
-    page = "/books"
-    parameters = {'bibkeys':f'ISBN:{isbn}', 'format':'json', 'jscmd':JSCMD}
-    resp = requests.get(BASE_URL + page, params=parameters).json()
-    book_data = list(resp.values())[0]
-
-    title = book_data['title']
-    author = book_data['authors']
-    work_id = book_data['identifiers']['openlibrary'][0]
-    synopsis = get_synopsis(work_id)
-    # This is a dictionary with three sizes (which are the keys): small, medium, large 
-    covers_dict = book_data['cover']
-    # Change to the key needed
-    cover = covers_dict['medium']
-
-    return title, author, synopsis, cover
+    return synopsis, image_url
