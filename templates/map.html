@@ -3,14 +3,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1"> <!-- This one should change the size depending on the device but I am not 100% sure-->
    <!-- <meta http-equiv="content-type" content="text/html; charset=UTF-8" />-->
     <link rel="icon" type="image/png" href="static/images/team_logo.png"> <!-- This is for the logo in the tab-->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <!-- <style>
-        body, html {
-            width: 93%;
-            height: 93%;
-            margin: 0;
-        }
-    </style> -->
 <!-- <Sorry, I had to put CSS part inside because whenever I tried to move it over to style.css it would not work for some reason and the modal would pop 
      up on top on the screen -->
 <style>
@@ -53,13 +45,14 @@ svg {
   transform: translate(0px, -50px);
   transition: all 0.7s cubic-bezier(0.59, -0.17, 0.3, 1.67);
   position: relative;
-  padding: 30px;
-  min-width: 700px;
-  max-width: 1100px;
+  padding: 20px;
+  width: 850px;
+  height: 500px;
   background-color: #ddd;
   color: #231D23;
   text-align: center;
   overflow: hidden;
+  overflow-y: auto;
   box-shadow: 0px 4px 20px 0px rgba(0, 0, 0, 0.4);
 }
 
@@ -78,7 +71,8 @@ svg {
 
 .column {
     float: left;
-    width: 33.33%
+    width: 33.33%;
+    padding: 10;
 }
 
 .column:after {
@@ -89,57 +83,38 @@ svg {
 </style>
 </head>
 <body>
-    <div  class="overlay">
+    <div class="overlay">
         <div class="modal">
-      
-          <!-- Modal content, we can change this later-->
-        <div class="modal-content">
-        <div class="modal-header">
-            <button class="close-btn">x</button>
-            <h2 class="modal-title"> {{ country|safe }} </h2>
-        </div>
-        <div class="modal-body">
-            <div class="column">
-                <h2>{{ movie_title|safe }}</h2>
-                <p>{{ movie_plot|safe }}</p>
-                <img src="{{ movie_poster|safe }}">
+            <!-- Modal content, we can change this later-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button class="close-btn">x</button>
+                    <h2 class="modal-title"> {{ country|safe }} </h2>
+                </div>
+                <div class="modal-body">
+                    <div class="column">
+                        <h2>{{ movie_title|safe }}</h2>
+                        <img src="{{ movie_poster|safe }}">
+                        <p>{{ movie_plot|safe }}</p>
+                    </div>
+                    <div class="column">
+                        <h2>{{ book_title|safe }}</h2>
+                        <p>{{ author|safe }}</p>
+                        <img src="{{ book_cover|safe }}">
+                        <p>{{ book_synopsis|safe }}</p>
+                    </div>
+                    <div class="column">
+                        <h2>{{ song_title|safe }}</h2>
+                        <p>{{ singer|safe }}</p>
+                        <img src="{{ album_cover|safe }}">
+                    </div>
+                </div>
             </div>
-            <div class="column">
-                <h2>{{ book_title|safe }}</h2>
-                <p>{{ author|safe }}</p>
-                <p>{{ book_synopsis|safe }}</p>
-                <img src="{{ book_cover|safe }}">
-            </div>
-            <div class="column">
-                <h2>{{ song_title|safe }}</h2>
-                <p>{{ singer|safe }}</p>
-                <img src="{{ album_cover|safe }}">
-            </div>
-        </div>
-        </div>
-      
         </div>
     </div>
+
     {{ svg_map }}
-    
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"> </script>
-    <script>
-        
-        //Invoking a modal by clicking on svg path
-    $(function () {
-        $('path').on("click", function() {
-            $('.overlay').addClass('is-open');
-            return false;
-        });
-
-        $('.close-btn').on("click", function () {
-            $('.overlay').removeClass('is-open');
-        });
-
-    });
-    
-    </script>
-
+   
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script type="text/javascript">
 
@@ -153,13 +128,19 @@ svg {
                     type: "POST",
                     dataType: "json",
                     success: function(data) {
-                        $(".modal-body").replaceWith(data)
+                        $(".modal-content").replaceWith(data)
                     }
                 });  
                 
                 // Add the pop up stuff
+                $('.overlay').addClass('is-open');
+                return false;
             });
-                        
+            
+            
+            $('.close-btn').on("click", function () {
+                $('.overlay').removeClass('is-open');
+            });
         });
     </script>
 </body>
