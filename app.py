@@ -37,39 +37,6 @@ class Country(db.Model):
     iso_code = db.Column(db.String(2), primary_key=True, nullable=False)
     country_name = db.Column(db.String, nullable=False)
 
-@app.route("/")
-def home():
-    svg_map = open("static\images\World map with configurable borders.svg").read()
-    return render_template("map.html", svg_map=Markup(svg_map))
-
-@app.route("/get_iso_code", methods = ['POST'])
-def get_iso_code():
-    if request.method == 'POST':
-        iso_code = request.get_json()['isoCode']
-
-        if len(iso_code) == 2:
-            movie_title, movie_plot, movie_poster_url = tmdb.get_highest_grossing_movie(iso_code)
-            country_name, book_title, author_name, olid = get_book_data(iso_code)
-            synopsis, book_cover_url = open_library.get_book_data_by_olid(olid)
-            song_title, singer_name, mbid = get_song_data(iso_code)
-            album_cover = music_brainz.get_cover(mbid)
-
-            contents = {
-                'country': country_name,
-                'movie_title': movie_title,
-                'movie_plot': movie_plot,
-                'movie_poster': movie_poster_url,
-                'book_title': book_title,
-                'author': author_name,
-                'book_synopsis': synopsis,
-                'book_cover': book_cover_url,
-                'song_title': song_title,
-                'singer': singer_name,
-                'album_cover': album_cover
-            }
-
-            return jsonify('', render_template('get_iso_code.html', **contents))
-
 def get_book_data(iso):
     country = Country.query.filter_by(iso_code=iso).first()
     country_name = country.country_name
@@ -93,5 +60,39 @@ def get_song_data(iso):
 
     return song_title, singer_name, mbid
 
+@app.route("/")
+def home():
+    svg_map = open("static\images\World map with configurable borders.svg").read()
+    return render_template("map.html", svg_map=Markup(svg_map))
+
+@app.route("/get_iso_code", methods = ['POST'])
+def get_iso_code():
+    if request.method == 'POST':
+        iso_code = request.get_json()['isoCode']
+
+        if len(iso_code) == 2:
+            movie_title, movie_plot, movie_poster_url = tmdb.get_highest_grossing_movie(iso_code)
+            country, book_title, author, olid = get_book_data(iso_code)
+            book_synopsis, book_cover = open_library.get_book_data_by_olid(olid)
+            song_title, singer, mbid = get_song_data(iso_code)
+            album_cover = music_brainz.get_cover(mbid)
+
+            contents = {
+                'country': country,
+                'movie_title': movie_title,
+                'movie_plot': movie_plot,
+                'movie_poster': movie_poster_url,
+                'book_title': book_title,
+                'author': author,
+                'book_synopsis': book_synopsis,
+                'book_cover': book_cover,
+                'song_title': song_title,
+                'singer': singer,
+                'album_cover': album_cover
+            }
+
+
+            return jsonify('', render_template('get_iso_code.html', **contents))
+
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True, threaded=True)

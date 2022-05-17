@@ -14,14 +14,26 @@
 <!-- <Sorry, I had to put CSS part inside because whenever I tried to move it over to style.css it would not work for some reason and the modal would pop 
      up on top on the screen -->
 <style>
-    
+body, html {
+    margin: 0;
+    width: 100%;
+}
+
+svg {
+    position:fixed; 
+    top:0; 
+    left:0; 
+    height:100%; 
+    width:100%; 
+}
+
 .overlay {
   position: absolute;
   height: 100%;
   width: 100%;
   background: rgba(0, 0, 0, 0.7);
   display: flex;
-  margin-top: -10%;
+  /* margin-top: -10%; */
   justify-content: center;
   align-items: center;
   pointer-events: none;
@@ -42,7 +54,8 @@
   transition: all 0.7s cubic-bezier(0.59, -0.17, 0.3, 1.67);
   position: relative;
   padding: 30px;
-  width: 400px;
+  min-width: 700px;
+  max-width: 1100px;
   background-color: #ddd;
   color: #231D23;
   text-align: center;
@@ -63,6 +76,16 @@
   transition: all 0.3s ease-in-out;
 }
 
+.column {
+    float: left;
+    width: 33.33%
+}
+
+.column:after {
+    content: "";
+    display: table;
+    clear: both;
+}
 </style>
 </head>
 <body>
@@ -70,36 +93,34 @@
         <div class="modal">
       
           <!-- Modal content, we can change this later-->
-          <div class="modal-content">
-              <div class="modal-header">
-                <button class="close-btn">x</button>
-                <h2 class="modal-title"> Country</h2>
-              </div>
-              <div class="modal-body">
-                <p>Movie - Book - Song </p>
-              </div>
-              
-          </div>
+        <div class="modal-content">
+        <div class="modal-header">
+            <button class="close-btn">x</button>
+            <h2 class="modal-title"> {{ country|safe }} </h2>
+        </div>
+        <div class="modal-body">
+            <div class="column">
+                <h2>{{ movie_title|safe }}</h2>
+                <p>{{ movie_plot|safe }}</p>
+                <img src="{{ movie_poster|safe }}">
+            </div>
+            <div class="column">
+                <h2>{{ book_title|safe }}</h2>
+                <p>{{ author|safe }}</p>
+                <p>{{ book_synopsis|safe }}</p>
+                <img src="{{ book_cover|safe }}">
+            </div>
+            <div class="column">
+                <h2>{{ song_title|safe }}</h2>
+                <p>{{ singer|safe }}</p>
+                <img src="{{ album_cover|safe }}">
+            </div>
+        </div>
+        </div>
       
         </div>
     </div>
     {{ svg_map }}
-   
-
-    <div id="content">
-        <h1>{{ country }}</h1>
-        <h2>{{ movie_title }}</h2>
-        <p>{{ movie_plot }}</p>
-        <img src= {{ movie_poster }}>
-        <br>
-        <h2>{{ book_title }}</h2>
-        <p>{{ author }}</p>
-        <p>{{ book_synopsis }}</p>
-        <img src= {{ book_cover }}>
-        <h2>{{ song_title }}</h2>
-        <p>{{ singer }}</p>
-        <img src= {{ album_cover }}>
-    </div>
     
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"> </script>
     <script>
@@ -111,7 +132,7 @@
             return false;
         });
 
-        $('.close-btn').click(function () {
+        $('.close-btn').on("click", function () {
             $('.overlay').removeClass('is-open');
         });
 
@@ -132,7 +153,7 @@
                     type: "POST",
                     dataType: "json",
                     success: function(data) {
-                        $("#content").replaceWith(data)
+                        $(".modal-body").replaceWith(data)
                     }
                 });  
                 

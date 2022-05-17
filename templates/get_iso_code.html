@@ -1,14 +1,24 @@
-<div id="content">
-    <h1>{{ country }}</h1>
-    <h2>{{ movie_title }}</h2>
-    <p>{{ movie_plot }}</p>
-    <img src= {{ movie_poster }}>
-    <br>
-    <h2>{{ book_title }}</h2>
-    <p>{{ author }}</p>
-    <p>{{ book_synopsis }}</p>
-    <img src= {{ book_cover }}>
-    <h2>{{ song_title }}</h2>
-    <p>{{ singer }}</p>
-    <img src= {{ album_cover }}>
+<div class="modal-content">
+    <div class="modal-header">
+      <button class="close-btn">x</button>
+      <h2 class="modal-title"> {{ country|safe }} </h2>
+    </div>
+    <div class="modal-body">
+        <div class="column">
+          <h2>{{ movie_title|safe }}</h2>
+          <p>{{ movie_plot|safe }}</p>
+          <img src="{{ movie_poster|safe }}">
+        </div>
+        <div class="column">
+          <h2>{{ book_title|safe }}</h2>
+          <p>{{ author|safe }}</p>
+          <p>{{ book_synopsis|safe }}</p>
+          <img src="{{ book_cover|safe }}">
+        </div>
+        <div class="column">
+          <h2>{{ song_title|safe }}</h2>
+          <p>{{ singer|safe }}</p>
+          <img src="{{ album_cover|safe }}">
+        </div>
+    </div>
 </div>

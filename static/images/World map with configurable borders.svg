@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"  viewBox="0 0 2576 1399">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"  viewBox="100 25 2555 1370">
 <!-- width="2756" height="1399" -->
 <defs>
 <style type="text/css">
 
 .ar:hover, .be:hover, .ca:hover, .ie:hover, .it:hover, .jp:hover, .nl:hover, .ch:hover, .tr:hover, .us:hover {
-    fill: #F19F19
+    fill: #F19F19;
+    cursor: pointer;
 }
 
 /* Areas and borders not individually specified */
@@ -97,12 +98,12 @@ Set the display property to yes or none, to control how each area is shown. */
 /* Circles for small jurisdictions
 Set the visibility property to hidden or visible, to hide or show all circles in each category. */
 
-.independent {fill:#C0C0C0; stroke:#000000; stroke-width:.5; visibility:visible} /* independent countries */
-.limited     {fill:#C0C0C0; stroke:#000000; stroke-width:.5; visibility:visible} /* countries with limited recognition */
-.external    {fill:#C0C0C0; stroke:#000000; stroke-width:.5; visibility:visible} /* external regions of countries, permanently inhabited */
-.autonomous  {fill:#C0C0C0; stroke:#000000; stroke-width:.5; visibility:visible} /* autonomous territories, permanently inhabited */
-.subdivision {fill:#C0C0C0; stroke:#000000; stroke-width:.5; visibility:visible} /* autonomous subdivisions of territories */
-.uninhabited {fill:#C0C0C0; stroke:#000000; stroke-width:.5; visibility:visible} /* territories and external regions not permanently inhabited */
+.independent {fill:#C0C0C0; stroke:#000000; stroke-width:.5; visibility:hidden} /* independent countries */
+.limited     {fill:#C0C0C0; stroke:#000000; stroke-width:.5; visibility:hidden} /* countries with limited recognition */
+.external    {fill:#C0C0C0; stroke:#000000; stroke-width:.5; visibility:hidden} /* external regions of countries, permanently inhabited */
+.autonomous  {fill:#C0C0C0; stroke:#000000; stroke-width:.5; visibility:hidden} /* autonomous territories, permanently inhabited */
+.subdivision {fill:#C0C0C0; stroke:#000000; stroke-width:.5; visibility:hidden} /* autonomous subdivisions of territories */
+.uninhabited {fill:#C0C0C0; stroke:#000000; stroke-width:.5; visibility:hidden} /* territories and external regions not permanently inhabited */
 
 /* If a circle category is hidden, circles for individual jurisdictions in that category can still be shown by setting them as visible in the section below. See the end of this file for a list of jurisdictions with circles and their categories. */
 
