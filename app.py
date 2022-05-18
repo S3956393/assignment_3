@@ -62,7 +62,7 @@ def get_song_data(iso):
 
 @app.route("/")
 def home():
-    svg_map = open("static\images\World map with configurable borders.svg").read()
+    svg_map = open("http://s3.amazonaws.com/iit-group12/World map with configurable borders.svg").read()
     return render_template("map.html", svg_map=Markup(svg_map))
 
 @app.route("/get_iso_code", methods = ['POST'])
