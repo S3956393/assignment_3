@@ -11,8 +11,8 @@
 
 /* Areas and borders not individually specified */
 
-.water    {fill:#FFFFFF} /* color of water */
-.land     {fill:#C0C0C0} /* color of land */
+.water    {fill:#8bb1fc} /* color of water */
+.land     {fill:#83d696} /* color of land */
 .border   {stroke:#FFFFFF; stroke-width:.5; stroke-linecap:round; stroke-linejoin:round; fill:none} /* color and width of agreed borders */
 .disputed {stroke:#FFFFFF; stroke-width:.2; stroke-linecap:round; stroke-linejoin:round; fill:none} /* color and width of disputed borders */
 .outline  {stroke:#000000; stroke-width:1 ; stroke-linecap:round; stroke-linejoin:round; fill:none} /* color and width of globe outline */
