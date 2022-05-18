@@ -1,7 +1,7 @@
 from flask import Flask, render_template, url_for, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from markupsafe import Markup
-import tmdb, open_library, music_brainz
+import tmdb, open_library, music_brainz, os
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:password@localhost:5432/IIT_assigment_3'
@@ -95,4 +95,5 @@ def get_iso_code():
             return jsonify('', render_template('get_iso_code.html', **contents))
 
 if __name__ == "__main__":
-    app.run(debug=True, threaded=True)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(debug=True, port=port, threaded=True)
