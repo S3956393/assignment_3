@@ -31,7 +31,7 @@ def get_movie_poster(poster_path):
     parameters = {'api_key':API_SECRET_KEY}
     image_data = requests.get(BASE_URL + page, params=parameters).json()['images']
  
-    base_url = image_data['base_url']
+    base_url = image_data['secure_base_url']
     poster_sizes = image_data['poster_sizes'] # This is a list set the image
     poster_size = poster_sizes[1]
     image_url = base_url + poster_size + poster_path
