@@ -1,7 +1,9 @@
 from flask import Flask, render_template, url_for, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from markupsafe import Markup
-import tmdb, open_library, music_brainz, os
+import tmdb, open_library, music_brainz, os, boto3
+
+s3 = boto3.client('s3')
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:password@localhost:5432/IIT_assigment_3'
@@ -62,7 +64,12 @@ def get_song_data(iso):
 
 @app.route("/")
 def home():
-    svg_map = open("http://s3.amazonaws.com/iit-group12/World map with configurable borders.svg").read()
+    svg_map = s3.generate_signed_url('get_object''get_object',
+                                                    Params={'Bucket': 'iit-group12',
+                                                            'Key': 'World map with configurable borders.svg'},
+                                                    ExpiresIn=3600)
+    # svg_map = s3.download_fileobj('iit-group12', 'World map with configurable borders.svg')
+    #  open("http://s3.amazonaws.com/iit-group12/").read()
     return render_template("map.html", svg_map=Markup(svg_map))
 
 @app.route("/get_iso_code", methods = ['POST'])
