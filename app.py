@@ -64,7 +64,7 @@ def get_song_data(iso):
 
 @app.route("/")
 def home():
-    svg_map = s3.generate_signed_url('get_object''get_object',
+    svg_map = s3.generate_signed_url('get_object',
                                                     Params={'Bucket': 'iit-group12',
                                                             'Key': 'World map with configurable borders.svg'},
                                                     ExpiresIn=3600)
