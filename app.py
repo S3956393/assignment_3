@@ -63,7 +63,7 @@ def get_song_data(iso):
 
 @app.route("/")
 def home():
-    svg_url = "http://s3.amazonaws.com/iit-group12/static/images/World map with configurable borders.svg"
+    svg_url = "https://iit-group12.s3.ap-southeast-2.amazonaws.com/static/images/World+map+with+configurable+borders.svg"
     svg_map = urllib.request.urlopen(svg_url).read().decode('utf-8')
 
     return render_template("map.html", svg_map=svg_map)
