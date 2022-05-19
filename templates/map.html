@@ -176,8 +176,7 @@ h1 {
     <div class="header"> <h1 data-heading="Name">CULTURE MAP</h1>
     </div>
 
-    {{ svg_map }}
-   
+    {{ svg_map|safe }}
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="http://s3.amazonaws.com/iit-group12/static/javascript/main.js"></script>
 </body>

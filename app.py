@@ -1,14 +1,11 @@
-from flask import Flask, render_template, url_for, request, jsonify
+from flask import Flask, render_template, send_file, url_for, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from markupsafe import Markup
-import tmdb, open_library, music_brainz, os, boto3
-
-# s3 = boto3.client('s3', aws_access_key_id=os.environ.get('ACCESS_KEY'), aws_secret_access_key=os.environ.get('SECRET_KEY'))
-s3 = boto3.resource('s3')
-bucket = s3.Bucket(os.environ.get('S3_BUCKET'))
+import tmdb, open_library, music_brainz, os, urllib.request
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL')#'postgresql://postgres:password@localhost:5432/IIT_assigment_3'
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL')
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:password@localhost:5432/IIT_assigment_3'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
@@ -29,7 +26,7 @@ class Song(db.Model):
     mbid = db.Column(db.String(36), primary_key=True, nullable=False)
     title = db.Column(db.String, nullable=False)
     iso_code = db.Column(db.String(2), db.ForeignKey('country.iso_code'), nullable=False)
-
+         
 class Singer(db.Model):
     __tablename__ = 'singer'
     singer_id = db.Column(db.Integer, primary_key=True, nullable=False)
@@ -66,15 +63,10 @@ def get_song_data(iso):
 
 @app.route("/")
 def home():
-    # s3_resource = boto3.resource('s3')
-    # bucket = os.environ.get('S3_BUCKET')
-    svg_map = s3.generate_signed_url('get_object',
-                                                    Params={'Bucket': bucket,
-                                                            'Key': 'World map with configurable borders.svg'},
-                                                    ExpiresIn=3600)
-    # svg_map = s3.download_fileobj('iit-group12', 'World map with configurable borders.svg')
-    #  open("http://s3.amazonaws.com/iit-group12/").read()
-    return render_template("map.html", svg_map=Markup(svg_map))
+    svg_url = "http://s3.amazonaws.com/iit-group12/static/images/World map with configurable borders.svg"
+    svg_map = urllib.request.urlopen(svg_url).read().decode('utf-8')
+
+    return render_template("map.html", svg_map=svg_map)
 
 @app.route("/get_iso_code", methods = ['POST'])
 def get_iso_code():
